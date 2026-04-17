@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Naiyemur Rahman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --panel: #13161e;
+      --border: #1e2330;
+      --accent: #c9a84c;
+      --accent2: #e8c97b;
+      --text: #e8e6df;
+      --muted: #6b7080;
+      --input-bg: #0d0f14;
+      --error: #e05c5c;
+      --success: #5ce0a0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridShift 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes gridShift {
+      0% { transform: translate(0,0); }
+      100% { transform: translate(48px, 48px); }
+    }
+
+    /* Glowing orb */
+    body::after {
+      content: '';
+      position: fixed;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%,-50%) scale(1.1); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 460px;
+      padding: 24px;
+      position: relative;
+      z-index: 10;
+      animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Top badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.25);
+      color: var(--accent2);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    /* Header */
+    .card-header { text-align: center; margin-bottom: 32px; }
+
+    .monogram {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0d0f14;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .card-sub {
+      font-size: 13.5px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+      gap: 4px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 7px;
+      transition: all 0.25s;
+    }
+
+    .tab.active {
+      background: var(--panel);
+      color: var(--accent2);
+      border: 1px solid rgba(201,168,76,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Forms */
+    .form { display: none; }
+    .form.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .field { margin-bottom: 18px; }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 15px;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 12px 14px 12px 40px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrap input:focus {
+      border-color: rgba(201,168,76,0.5);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+    }
+
+    .input-wrap input:focus + .icon,
+    .input-wrap input:focus ~ .icon {
+      color: var(--accent);
+    }
+
+    .input-wrap input::placeholder { color: var(--muted); }
+
+    /* Toggle password */
+    .toggle-pw {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .toggle-pw:hover { color: var(--accent); }
+
+    /* Row for two fields */
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* Checkbox */
+    .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .check-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .check-label input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .forgot {
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .forgot:hover { opacity: 0.7; }
+
+    /* Button */
+    .btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0d0f14;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(201,168,76,0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    .btn:hover::after { background: rgba(255,255,255,0.07); }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Social */
+    .social-row { display: flex; gap: 10px; }
+
+    .social-btn {
+      flex: 1;
+      padding: 11px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .social-btn:hover {
+      border-color: rgba(201,168,76,0.3);
+      color: var(--text);
+    }
+
+    /* Footer */
+    .card-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Alert */
+    .alert {
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .alert.error { background: rgba(224,92,92,0.1); border: 1px solid rgba(224,92,92,0.3); color: #e05c5c; }
+    .alert.success { background: rgba(92,224,160,0.1); border: 1px solid rgba(92,224,160,0.3); color: #5ce0a0; }
+    .alert.show { display: block; animation: fadeIn 0.3s ease; }
+
+    /* Password strength */
+    .strength-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .strength-seg {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      transition: background 0.3s;
+    }
+    .strength-seg.weak { background: var(--error); }
+    .strength-seg.medium { background: var(--accent); }
+    .strength-seg.strong { background: var(--success); }
+
+    .strength-label {
+      font-size: 11px;
+      margin-top: 5px;
+      color: var(--muted);
+    }
+
+    .user-name-display {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .user-name-display span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="badge">DBMS Assignment — Leading University</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="monogram">NR</div>
+      <h1 class="card-title">Welcome Back</h1>
+      <p class="card-sub">Sign in to your account or create a new one</p>
+    </div>
+
+    <div class="alert error" id="alertBox"></div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Login</button>
+      <button class="tab" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="form active" id="loginForm">
+      <div class="field">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email"/>
+          <span class="icon">✉</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="loginPass" placeholder="Enter your password"/>
+          <span class="icon">🔒</span>
+          <button class="toggle-pw" type="button" onclick="togglePw('loginPass', this)">👁</button>
+        </div>
+      </div>
+
+      <div class="check-row">
+        <label class="check-label">
+          <input type="checkbox" id="remember"/> Remember me
+        </label>
+        <a href="#" class="forgot">Forgot password?</a>
+      </div>
+
+      <button class="btn" onclick="handleLogin()">Sign In</button>
+
+      <div class="divider">or continue with</div>
+      <div class="social-row">
+        <button class="social-btn">🌐 Google</button>
+        <button class="social-btn">🐙 GitHub</button>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="form" id="registerForm">
+      <div class="row">
+        <div class="field">
+          <label>First Name</label>
+          <div class="input-wrap">
+            <input type="text" id="regFirst" placeholder="Naiyemur"/>
+            <span class="icon">👤</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Last Name</label>
+          <div class="input-wrap">
+            <input type="text" id="regLast" placeholder="Rahman"/>
+            <span class="icon">👤</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="regEmail" placeholder="naiyemur@example.com"/>
+          <span class="icon">✉</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="regPass" placeholder="Create a strong password" oninput="checkStrength(this.value)"/>
+          <span class="icon">🔒</span>
+          <button class="toggle-pw" type="button" onclick="togglePw('regPass', this)">👁</button>
+        </div>
+        <div class="strength-bar">
+          <div class="strength-seg" id="seg1"></div>
+          <div class="strength-seg" id="seg2"></div>
+          <div class="strength-seg" id="seg3"></div>
+          <div class="strength-seg" id="seg4"></div>
+        </div>
+        <div class="strength-label" id="strengthLabel">Enter a password</div>
+      </div>
+
+      <div class="field">
+        <label>Confirm Password</label>
+        <div class="input-wrap">
+          <input type="password" id="regPassConfirm" placeholder="Repeat your password"/>
+          <span class="icon">🔑</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom: 22px;">
+        <label class="check-label" style="font-size:13px; color: var(--muted);">
+          <input type="checkbox" id="terms" style="width:16px;height:16px;accent-color:var(--accent)"/>
+          I agree to the Terms & Privacy Policy
+        </label>
+      </div>
+
+      <button class="btn" onclick="handleRegister()">Create Account</button>
+    </div>
+
+    <div class="card-footer">
+      DBMS Assignment · <span style="color: var(--accent);">CSE Dept</span> · Leading University, Sylhet
+    </div>
+  </div>
+
+  <div class="user-name-display">Submitted by: <span>Naiyemur Rahman</span></div>
+</div>
+
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0 && tab==='login')||(i===1 && tab==='register')));
+    document.getElementById('loginForm').classList.toggle('active', tab==='login');
+    document.getElementById('registerForm').classList.toggle('active', tab==='register');
+    hideAlert();
+  }
+
+  function showAlert(msg, type='error') {
+    const box = document.getElementById('alertBox');
+    box.textContent = msg;
+    box.className = `alert ${type} show`;
+  }
+
+  function hideAlert() {
+    document.getElementById('alertBox').className = 'alert';
+  }
+
+  function togglePw(id, btn) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? '👁' : '🔒';
+  }
+
+  function checkStrength(val) {
+    const segs = [1,2,3,4].map(i => document.getElementById('seg'+i));
+    const label = document.getElementById('strengthLabel');
+    segs.forEach(s => { s.className = 'strength-seg'; });
+    if (!val) { label.textContent = 'Enter a password'; return; }
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const cls = score <= 1 ? 'weak' : score <= 3 ? 'medium' : 'strong';
+    const labels = { weak: 'Weak', medium: 'Medium', strong: 'Strong' };
+    for (let i = 0; i < score; i++) segs[i].classList.add(cls);
+    label.textContent = 'Strength: ' + labels[cls];
+    label.style.color = cls === 'weak' ? 'var(--error)' : cls === 'medium' ? 'var(--accent)' : 'var(--success)';
+  }
+
+  function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    if (!email || !pass) { showAlert('⚠ Please fill in all fields.'); return; }
+    if (!email.includes('@')) { showAlert('⚠ Enter a valid email address.'); return; }
+    showAlert('✓ Login successful! (Frontend demo — database not connected yet)', 'success');
+  }
+
+  function handleRegister() {
+    const first = document.getElementById('regFirst').value.trim();
+    const last = document.getElementById('regLast').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value;
+    const confirm = document.getElementById('regPassConfirm').value;
+    const terms = document.getElementById('terms').checked;
+    if (!first || !last || !email || !pass || !confirm) { showAlert('⚠ Please fill in all fields.'); return; }
+    if (!email.includes('@')) { showAlert('⚠ Enter a valid email address.'); return; }
+    if (pass !== confirm) { showAlert('⚠ Passwords do not match.'); return; }
+    if (pass.length < 6) { showAlert('⚠ Password must be at least 6 characters.'); return; }
+    if (!terms) { showAlert('⚠ Please accept the terms and conditions.'); return; }
+    showAlert('✓ Account created! (Frontend demo — database not connected yet)', 'success');
+  }
+</script>
+</body>
+</html>
