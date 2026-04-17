@@ -4,6 +4,7 @@
 
 Login-Register-Page is a modern and responsive authentication UI built using HTML, CSS, and JavaScript. It features a clean dark-themed design with smooth animations, password strength validation, and interactive form handling. This project is ideal for frontend practice and can be extended into a full-stack authentication system.
 
+
 🎯 Motivation
 
 This project was created to:
@@ -12,23 +13,34 @@ Practice modern UI/UX design for authentication systems
 Build a clean and professional login/register interface
 Understand frontend validation and user interaction
 Prepare a base template for future full-stack projects
+
+
 🚀 Key Features
-Feature	Description
-🔐 Login System	Simple login form with validation
-📝 Registration	User-friendly registration form
-🔁 Toggle Tabs	Switch between login and register
-🔑 Password Toggle	Show/hide password functionality
-📊 Password Strength	Real-time password strength meter
-⚠️ Form Validation	Input validation with alerts
-🎨 Modern UI	Dark theme with animations and effects
-📱 Responsive Design	Works on mobile and desktop
-🛠️ Technologies & Tools
+| Feature              | Description                            |
+| -------------------- | -------------------------------------- |
+| 🔐 Login System      | Simple login form with validation      |
+| 📝 Registration      | User-friendly registration form        |
+| 🔁 Toggle Tabs       | Switch between login and register      |
+| 🔑 Password Toggle   | Show/hide password functionality       |
+| 📊 Password Strength | Real-time password strength meter      |
+| ⚠️ Form Validation   | Input validation with alerts           |
+| 🎨 Modern UI         | Dark theme with animations and effects |
+| 📱 Responsive Design | Works on mobile and desktop            |
+
+
+
 Technology	Purpose
-HTML5	Structure of the webpage
-CSS3	Styling and animations
-JavaScript	Form handling and validation
-Google Fonts	Typography design
+| Technology   | Purpose                      |
+| ------------ | ---------------------------- |
+| HTML5        | Structure of the webpage     |
+| CSS3         | Styling and animations       |
+| JavaScript   | Form handling and validation |
+| Google Fonts | Typography design            |
+
+
 📦 Installation & Setup
+
+
 # Clone the repository
 git clone https://github.com/dmnaimrahman/Login-Register-Page.git
 
@@ -36,6 +48,7 @@ git clone https://github.com/dmnaimrahman/Login-Register-Page.git
 cd Login-Register-Page
 
 # Open index.html in browser
+
 
 👉 No installation needed — pure frontend project
 
@@ -64,14 +77,14 @@ This is a frontend-only demo — no database is connected.
 Login & Register UI included
 Animated background grid
 Clean and modern card layout
-🤝 Contributing
 
+🤝 Contributing
 Contributions are welcome!
 Feel free to fork this repo and submit a pull request.
 
 📜 License
-
 This project is open-source and available under the MIT License.
+
 
 👨‍💻 Author
 
