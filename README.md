@@ -73,6 +73,7 @@ This is a frontend-only demo — no database is connected.
 🔐 Real authentication system
 📧 Email verification
 🔁 Forgot password system
+
 📸 UI Preview
 Login & Register UI included
 Animated background grid
