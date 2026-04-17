@@ -74,7 +74,12 @@ This is a frontend-only demo — no database is connected.
 📧 Email verification
 🔁 Forgot password system
 
-📸 UI Preview
+ 📸 UI Preview
+
+<img width="1166" height="907" alt="image" src="https://github.com/user-attachments/assets/8e59ab2c-b72e-4e55-a8da-f6eb6f1afa4d" />
+<img width="1295" height="917" alt="image" src="https://github.com/user-attachments/assets/96b16c1b-c49c-4d01-97ec-4a83f8e01049" />
+
+
 Login & Register UI included
 Animated background grid
 Clean and modern card layout
